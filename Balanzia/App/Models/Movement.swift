@@ -17,7 +17,7 @@ class Movement {
   var createdAt: Date
   var updatedAt: Date
 
-  var category: Category
+  var category: Category?
   var originAccount: Account?
   var destinationAccount: Account?
 
@@ -25,7 +25,7 @@ class Movement {
     amount: Double,
     date: Date,
     comment: String = "",
-    category: Category,
+    category: Category? = nil,
     originAccount: Account? = nil,
     destinationAccount: Account? = nil
   ) {
