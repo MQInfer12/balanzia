@@ -5,71 +5,64 @@
 //  Created by Mauricio Molina on 10/08/2025.
 //
 
-import CoreData
 import Foundation
+import SwiftData
 
-@objc(Account)
-public class Account: NSManagedObject {
-  public override func awakeFromInsert() {
-    super.awakeFromInsert()
-    id = UUID()
-    createdAt = Date()
-    updatedAt = Date()
-  }
+@Model
+class Account {
+  @Attribute(.unique) var id: UUID
+  var name: String
+  var type: String
+  var amount: Double
+  var createdAt: Date
+  var updatedAt: Date
 
-  public override func willSave() {
-    super.willSave()
-    let keysChanged = changedValues().keys.filter { $0 != "updatedAt" }
-    if !keysChanged.isEmpty {
-      setPrimitiveValue(Date(), forKey: "updatedAt")
-    }
-  }
-}
+  @Relationship(deleteRule: .cascade, inverse: \Movement.originAccount)
+  var originMovements: [Movement] = []
+  @Relationship(deleteRule: .cascade, inverse: \Movement.destinationAccount)
+  var destinationMovements: [Movement] = []
 
-extension Account: Identifiable {
-  @nonobjc public class func fetchRequest() -> NSFetchRequest<Account> {
-    return NSFetchRequest<Account>(entityName: "Account")
-  }
-
-  @NSManaged public var id: UUID
-  @NSManaged public var name: String
-  @NSManaged public var type: String
-  @NSManaged public var amount: Double
-  @NSManaged public var createdAt: Date
-  @NSManaged public var updatedAt: Date
-
-  @NSManaged public var originMovements: Set<Movement>
-  @NSManaged public var destinationMovements: Set<Movement>
-}
-
-extension Account {
-  public var total: Double {
+  var balance: Double {
     var calc = amount
     calc -= originMovements.reduce(0) { $0 + $1.amount }
     calc += destinationMovements.reduce(0) { $0 + $1.amount }
     return calc
   }
 
-  public var typeEnum: AccountType {
-    get {
-      return AccountType(rawValue: type) ?? .cash
-    }
-    set {
-      type = newValue.rawValue
-    }
+  var typeEnum: AccountType {
+    get { AccountType(rawValue: type) ?? .cash }
+    set { type = newValue.rawValue }
   }
 
   var icon: String {
     switch typeEnum {
-    case .cash:
-      return "dollarsign.circle.fill"
-    case .bank:
-      return "building.columns.fill"
-    case .receivable:
-      return "arrow.up.right.circle.fill"
-    case .payable:
-      return "arrow.down.left.circle.fill"
+    case .cash: return "dollarsign.circle.fill"
+    case .bank: return "building.columns.fill"
+    case .receivable: return "arrow.up.right.circle.fill"
+    case .payable: return "arrow.down.left.circle.fill"
     }
+  }
+
+  init(
+    name: String,
+    type: String,
+    amount: Double
+  ) {
+    self.id = UUID()
+    self.name = name
+    self.type = type
+    self.amount = amount
+    self.createdAt = Date()
+    self.updatedAt = Date()
+  }
+}
+
+extension Account {
+  func update(name: String? = nil, type: String? = nil, amount: Double? = nil) {
+    if let name = name { self.name = name }
+    if let type = type { self.type = type }
+    if let amount = amount { self.amount = amount }
+    self.updatedAt = Date()
   }
 }
 

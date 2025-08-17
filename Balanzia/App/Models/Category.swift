@@ -5,50 +5,46 @@
 //  Created by Mauricio Molina on 14/08/2025.
 //
 
-import CoreData
 import Foundation
+import SwiftData
 
-@objc(Category)
-public class Category: NSManagedObject {
-  public override func awakeFromInsert() {
-    super.awakeFromInsert()
-    id = UUID()
-    createdAt = Date()
-    updatedAt = Date()
+@Model
+class Category {
+  @Attribute(.unique) var id: UUID
+  var name: String
+  var type: String
+  var emoji: String
+  var createdAt: Date
+  var updatedAt: Date
+
+  @Relationship(deleteRule: .cascade, inverse: \Movement.category)
+  var movements: [Movement] = []
+
+  var typeEnum: CategoryType {
+    get { CategoryType(rawValue: type) ?? .income }
+    set { type = newValue.rawValue }
   }
 
-  public override func willSave() {
-    super.willSave()
-    let keysChanged = changedValues().keys.filter { $0 != "updatedAt" }
-    if !keysChanged.isEmpty {
-      setPrimitiveValue(Date(), forKey: "updatedAt")
-    }
+  init(
+    name: String,
+    type: String,
+    emoji: String
+  ) {
+    self.id = UUID()
+    self.name = name
+    self.type = type
+    self.emoji = emoji
+    self.createdAt = Date()
+    self.updatedAt = Date()
   }
-}
-
-extension Category: Identifiable {
-  @nonobjc public class func fetchRequest() -> NSFetchRequest<Category> {
-    return NSFetchRequest<Category>(entityName: "Category")
-  }
-
-  @NSManaged public var id: UUID
-  @NSManaged public var name: String
-  @NSManaged public var type: String
-  @NSManaged public var emoji: String
-  @NSManaged public var createdAt: Date
-  @NSManaged public var updatedAt: Date
-
-  @NSManaged public var movements: Set<Movement>
 }
 
 extension Category {
-  public var typeEnum: CategoryType {
-    get {
-      return CategoryType(rawValue: type) ?? .income
-    }
-    set {
-      type = newValue.rawValue
-    }
+  func update(name: String? = nil, type: String? = nil, emoji: String? = nil) {
+    if let name = name { self.name = name }
+    if let type = type { self.type = type }
+    if let emoji = emoji { self.emoji = emoji }
+    self.updatedAt = Date()
   }
 }
 

@@ -5,16 +5,17 @@
 //  Created by Mauricio Molina on 15/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MovementForm: View {
-  @Environment(\.managedObjectContext) private var viewContext
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @StateObject private var alertManager = AlertManager()
 
-  @AccountsFetchRequest private var accounts
-  @CategoriesFetchRequest private var categories
+  @Query private var accounts: [Account]
+  @Query private var categories: [Category]
 
   var movement: Movement?
   @State private var isEditing = false
@@ -164,12 +165,8 @@ struct MovementForm: View {
       return
     }
 
-    let targetMovement = movement ?? Movement(context: viewContext)
-
-    // Parseo seguro de monto
     var calculatedAmount = amount
     let decimalSeparator = Locale.current.decimalSeparator ?? "."
-
     if amount.hasPrefix(decimalSeparator) {
       calculatedAmount = "0" + amount
     }
@@ -178,20 +175,33 @@ struct MovementForm: View {
         of: decimalSeparator, with: "")
     }
 
-    targetMovement.amount =
-      Double(
-        calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
-      ) ?? 0.0
-
-    // Campos básicos
-    targetMovement.date = date
-    targetMovement.comment = comment
-    targetMovement.category = category!
-    targetMovement.originAccount = originAccount
-    targetMovement.destinationAccount = destinationAccount
+    if let existing = movement {
+      existing.update(
+        amount: Double(
+          calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
+        ) ?? 0.0,
+        date: date,
+        comment: comment,
+        category: category!,
+        originAccount: originAccount,
+        destinationAccount: destinationAccount
+      )
+    } else {
+      let newMovement = Movement(
+        amount: Double(
+          calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
+        ) ?? 0.0,
+        date: date,
+        comment: comment,
+        category: category!,
+        originAccount: originAccount,
+        destinationAccount: destinationAccount
+      )
+      modelContext.insert(newMovement)
+    }
 
     do {
-      try viewContext.save()
+      try modelContext.save()
       dismiss()
     } catch {
       print("Error al guardar cambios: \(error.localizedDescription)")
@@ -205,8 +215,8 @@ struct MovementForm: View {
       message: "¿Seguro que quieres eliminar este movimiento?",
       buttons: [
         .destructive(Text("Eliminar")) {
-          viewContext.delete(movement)
-          try? viewContext.save()
+          modelContext.delete(movement)
+          try? modelContext.save()
           dismiss()
         },
         .cancel(Text("Cancelar")),

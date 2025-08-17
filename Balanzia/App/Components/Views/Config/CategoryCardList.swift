@@ -5,10 +5,11 @@
 //  Created by Mauricio Molina on 14/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct CategoryCardList: View {
-  @CategoriesFetchRequest private var categories
+  @Query private var categories: [Category]
 
   var body: some View {
     if categories.isEmpty {

@@ -5,10 +5,11 @@
 //  Created by Mauricio Molina on 14/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct AccountCardList: View {
-  var accounts: FetchedResults<Account>
+  @Query private var accounts: [Account]
 
   var body: some View {
     if accounts.isEmpty {

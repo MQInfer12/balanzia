@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CategoryForm: View {
-  @Environment(\.managedObjectContext) private var viewContext
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @StateObject private var alertManager = AlertManager()
@@ -107,15 +107,23 @@ struct CategoryForm: View {
       return
     }
 
-    let targetAccount = category ?? Category(context: viewContext)
-
-    // Campos básicos
-    targetAccount.name = name
-    targetAccount.type = type ?? ""
-    targetAccount.emoji = emoji
+    if let existing = category {
+      existing.update(
+        name: name,
+        type: type!,
+        emoji: emoji
+      )
+    } else {
+      let newCategory = Category(
+        name: name,
+        type: type!,
+        emoji: emoji
+      )
+      modelContext.insert(newCategory)
+    }
 
     do {
-      try viewContext.save()
+      try modelContext.save()
       dismiss()
     } catch {
       print("Error al guardar cambios: \(error.localizedDescription)")
@@ -135,8 +143,8 @@ struct CategoryForm: View {
           : ""),
       buttons: [
         .destructive(Text("Eliminar")) {
-          viewContext.delete(category)
-          try? viewContext.save()
+          modelContext.delete(category)
+          try? modelContext.save()
           dismiss()
         },
         .cancel(Text("Cancelar")),

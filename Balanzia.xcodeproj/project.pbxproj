@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7066F2F12E51EE98001CC27E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7066F2F02E51EE95001CC27E /* .gitignore */; };
-		70A3C06A2E49262500F5E308 /* BalanziaModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70A3C0682E49262500F5E308 /* BalanziaModel.xcdatamodeld */; };
+		7066F2F32E51EF2C001CC27E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7066F2F22E51EF29001CC27E /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7022CEAB2E48305E002FF07C /* Balanzia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Balanzia.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7066F2F02E51EE95001CC27E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		70A3C0692E49262500F5E308 /* BalanziaModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BalanziaModel.xcdatamodel; sourceTree = "<group>"; };
+		7066F2F22E51EF29001CC27E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -39,8 +37,7 @@
 		7022CEA22E48305E002FF07C = {
 			isa = PBXGroup;
 			children = (
-				7066F2F02E51EE95001CC27E /* .gitignore */,
-				70A3C0682E49262500F5E308 /* BalanziaModel.xcdatamodeld */,
+				7066F2F22E51EF29001CC27E /* .gitignore */,
 				7022CEAD2E48305E002FF07C /* Balanzia */,
 				7022CEAC2E48305E002FF07C /* Products */,
 			);
@@ -118,7 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7066F2F12E51EE98001CC27E /* .gitignore in Resources */,
+				7066F2F32E51EF2C001CC27E /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +126,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70A3C06A2E49262500F5E308 /* BalanziaModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,19 +333,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		70A3C0682E49262500F5E308 /* BalanziaModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				70A3C0692E49262500F5E308 /* BalanziaModel.xcdatamodel */,
-			);
-			currentVersion = 70A3C0692E49262500F5E308 /* BalanziaModel.xcdatamodel */;
-			path = BalanziaModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 7022CEA32E48305E002FF07C /* Project object */;
 }

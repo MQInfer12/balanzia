@@ -5,6 +5,7 @@
 //  Created by Mauricio Molina on 09/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 // MARK: - CONFIG VIEW
@@ -13,7 +14,7 @@ enum TabType {
 }
 
 struct ConfigView: View {
-  @AccountsFetchRequest private var accounts
+  @Query private var accounts: [Account]
 
   @State private var selectedTab: TabType = .cuentas
   @Namespace private var animation
@@ -22,7 +23,7 @@ struct ConfigView: View {
     let incomes =
       accounts
       .filter { $0.typeEnum == .cash || $0.typeEnum == .bank }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     return incomes
   }
 
@@ -34,13 +35,13 @@ struct ConfigView: View {
           || $0.typeEnum == .bank
           || $0.typeEnum == .receivable
       }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     let debts =
       accounts
       .filter {
         $0.typeEnum == .payable
       }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     return incomes - debts
   }
 
@@ -114,7 +115,7 @@ struct ConfigView: View {
         ZStack {
           Group {
             if selectedTab == .cuentas {
-              AccountCardList(accounts: accounts)
+              AccountCardList()
             } else {
               CategoryCardList()
             }

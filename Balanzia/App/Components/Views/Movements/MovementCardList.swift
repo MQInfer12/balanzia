@@ -5,10 +5,11 @@
 //  Created by Mauricio Molina on 15/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MovementCardList: View {
-  @MovementsFetchRequest private var movements
+  @Query private var movements: [Movement]
 
   var body: some View {
     if movements.isEmpty {

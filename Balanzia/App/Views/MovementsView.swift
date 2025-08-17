@@ -5,16 +5,17 @@
 //  Created by Mauricio Molina on 09/08/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct MovementsView: View {
-  @AccountsFetchRequest private var accounts
+  @Query private var accounts: [Account]
 
   var available: Double {
     let incomes =
       accounts
       .filter { $0.typeEnum == .cash || $0.typeEnum == .bank }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     return incomes
   }
 
@@ -26,13 +27,13 @@ struct MovementsView: View {
           || $0.typeEnum == .bank
           || $0.typeEnum == .receivable
       }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     let debts =
       accounts
       .filter {
         $0.typeEnum == .payable
       }
-      .reduce(0.0) { $0 + $1.total }
+      .reduce(0.0) { $0 + $1.balance }
     return incomes - debts
   }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AccountForm: View {
-  @Environment(\.managedObjectContext) private var viewContext
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
 
   @StateObject private var alertManager = AlertManager()
@@ -66,7 +66,6 @@ struct AccountForm: View {
 
       name = account.name
       type = account.type
-
       let decimalSeparator = Locale.current.decimalSeparator ?? "."
       amount = String(account.amount).replacingOccurrences(
         of: ".", with: decimalSeparator
@@ -106,16 +105,8 @@ struct AccountForm: View {
       return
     }
 
-    let targetAccount = account ?? Account(context: viewContext)
-
-    // Campos básicos
-    targetAccount.name = name
-    targetAccount.type = type ?? ""
-
-    // Parseo seguro de monto
     var calculatedAmount = amount
     let decimalSeparator = Locale.current.decimalSeparator ?? "."
-
     if amount.hasPrefix(decimalSeparator) {
       calculatedAmount = "0" + amount
     }
@@ -124,16 +115,27 @@ struct AccountForm: View {
         of: decimalSeparator, with: "")
     }
 
-    targetAccount.amount =
-      Double(
-        calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
-      ) ?? 0.0
-
-    // Fechas
-    targetAccount.updatedAt = Date()
+    if let existing = account {
+      existing.update(
+        name: name,
+        type: type!,
+        amount: Double(
+          calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
+        ) ?? 0.0
+      )
+    } else {
+      let newAccount = Account(
+        name: name,
+        type: type ?? "",
+        amount: Double(
+          calculatedAmount.replacingOccurrences(of: decimalSeparator, with: ".")
+        ) ?? 0.0
+      )
+      modelContext.insert(newAccount)
+    }
 
     do {
-      try viewContext.save()
+      try modelContext.save()
       dismiss()
     } catch {
       print("Error al guardar cambios: \(error.localizedDescription)")
@@ -155,8 +157,8 @@ struct AccountForm: View {
           : ""),
       buttons: [
         .destructive(Text("Eliminar")) {
-          viewContext.delete(account)
-          try? viewContext.save()
+          modelContext.delete(account)
+          try? modelContext.save()
           dismiss()
         },
         .cancel(Text("Cancelar")),
