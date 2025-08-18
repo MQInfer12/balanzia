@@ -12,6 +12,9 @@ struct Balanzia_X_Watch_AppApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
+        .onAppear {
+          _ = WatchWCManager.shared
+        }
     }
   }
 }

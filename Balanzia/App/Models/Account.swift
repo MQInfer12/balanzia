@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Account {
+class Account: Codable {
   @Attribute(.unique) var id: UUID
   var name: String
   var type: String
@@ -54,6 +54,31 @@ class Account {
     self.amount = amount
     self.createdAt = Date()
     self.updatedAt = Date()
+  }
+
+  enum CodingKeys: String, CodingKey {
+    case id, name, type, amount, createdAt, updatedAt
+  }
+
+  required convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let name = try container.decode(String.self, forKey: .name)
+    let type = try container.decode(String.self, forKey: .type)
+    let amount = try container.decode(Double.self, forKey: .amount)
+    self.init(name: name, type: type, amount: amount)
+    self.id = try container.decode(UUID.self, forKey: .id)
+    self.createdAt = try container.decode(Date.self, forKey: .createdAt)
+    self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(id, forKey: .id)
+    try container.encode(name, forKey: .name)
+    try container.encode(type, forKey: .type)
+    try container.encode(amount, forKey: .amount)
+    try container.encode(createdAt, forKey: .createdAt)
+    try container.encode(updatedAt, forKey: .updatedAt)
   }
 }
 

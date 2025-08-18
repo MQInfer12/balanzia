@@ -19,7 +19,9 @@ struct UINumericPicker: View {
     let step = steps[stepIndex]
     let offset = integerPart % step
     return stride(
-      from: range.lowerBound + offset, through: range.upperBound, by: step
+      from: range.lowerBound + offset,
+      through: range.upperBound,
+      by: step
     ).map { $0 }
   }
 
@@ -68,7 +70,7 @@ struct UINumericPicker: View {
             .font(.system(size: 10))
 
           Spacer()
-          
+
           Button {
             stepIndex = (stepIndex + 1) % steps.count
           } label: {
@@ -87,13 +89,13 @@ struct UINumericPicker: View {
     .onAppear {
       integerPart = Int(value)
       decimalPart = Int(
-        (value - Double(integerPart)) * Double(decimalMultiplier))
+        (value - Double(integerPart)) * Double(decimalMultiplier)
+      )
     }
   }
 
   private func updateValue() {
     value =
       Double(integerPart) + Double(decimalPart) / Double(decimalMultiplier)
-    print(value)
   }
 }

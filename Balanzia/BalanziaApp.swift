@@ -10,11 +10,12 @@ import SwiftUI
 
 @main
 struct BalanziaApp: App {
-  let persistenceController = PersistenceController.shared
-
   var body: some Scene {
     WindowGroup {
       ContentView()
+        .onAppear {
+          _ = WCManager.shared
+        }
     }
     .modelContainer(for: [Account.self, Category.self, Movement.self])
   }

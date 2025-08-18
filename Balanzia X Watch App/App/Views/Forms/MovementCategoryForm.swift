@@ -8,24 +8,22 @@
 import SwiftUI
 
 struct MovementCategoryForm: View {
-  @State var date = Date()
-  @State var amount = 0.0
-  
+  @StateObject private var wcManager = WatchWCManager.shared
 
   var body: some View {
     ScrollView(.vertical, showsIndicators: true) {
       VStack {
-        UINavigationLink(
-          emoji: "🍕",
-          title: "Alimentación"
-        ) {
-
-        }
-        UINavigationLink(
-          emoji: "💵",
-          title: "Salario"
-        ) {
-
+        ForEach(wcManager.categories) { category in
+          UINavigationLink(
+            emoji: category.emoji,
+            title: category.name
+          ) {
+            if category.type == .expense || category.type == .transfer {
+              MovementOriginAccountForm()
+            } else if category.type == .income {
+              MovementDestinationAccountForm()
+            }
+          }
         }
       }
     }

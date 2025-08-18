@@ -12,20 +12,25 @@ struct AccountCardList: View {
   @Query private var accounts: [Account]
 
   var body: some View {
-    if accounts.isEmpty {
-      Text("No tienes cuentas registradas aún")
-        .font(.caption)
-        .opacity(0.6)
-    } else {
-      ScrollView(.vertical) {
-        VStack(spacing: 12) {
-          ForEach(accounts) { account in
-            AccountCard(account: account)
+    Group {
+      if accounts.isEmpty {
+        Text("No tienes cuentas registradas aún")
+          .font(.caption)
+          .opacity(0.6)
+      } else {
+        ScrollView(.vertical) {
+          VStack(spacing: 12) {
+            ForEach(accounts) { account in
+              AccountCard(account: account)
+            }
           }
+          .padding()
+          .padding(.bottom, 72)
         }
-        .padding()
-        .padding(.bottom, 72)
       }
+    }
+    .onAppear {
+      WCManager.shared.syncAccounts(accounts)
     }
   }
 }
