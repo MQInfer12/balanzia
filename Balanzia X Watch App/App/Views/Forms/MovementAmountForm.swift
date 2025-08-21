@@ -8,15 +8,25 @@
 import SwiftUI
 
 struct MovementAmountForm: View {
-  @State var date = Date()
-  @State var amount = 0.0
+  @EnvironmentObject var form: MovementFormState
+  @Environment(\.dismiss) private var dismiss
 
   var body: some View {
     VStack {
-      UINumericPicker(title: "Monto", value: $amount)
-      UIDatePicker(title: "Fecha", value: $date)
+      UINumericPicker(title: "Monto", value: $form.amount)
+      UIDatePicker(title: "Fecha", value: $form.date)
     }
     .toolbar {
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+          form.reset()
+        } label: {
+          Image(systemName: "xmark")
+            .font(.headline)
+        }
+      }
+
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink(destination: MovementCategoryForm()) {
           Image(systemName: "checkmark")
@@ -25,6 +35,7 @@ struct MovementAmountForm: View {
         }
       }
     }
+    .navigationBarBackButtonHidden(true)
     .navigationTitle {
       Text("Monto")
         .foregroundColor(Color.primary600)

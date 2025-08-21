@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct CategoryCardList: View {
-  @Query private var categories: [Category]
+  let categories: [Category]
 
   var body: some View {
     Group {
@@ -28,9 +28,6 @@ struct CategoryCardList: View {
           .padding(.bottom, 72)
         }
       }
-    }
-    .onAppear {
-      WCManager.shared.syncCategories(categories)
     }
   }
 }

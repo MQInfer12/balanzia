@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+  @StateObject private var wcManager = WatchWCManager.shared
+  @StateObject private var movementFormState = MovementFormState()
+
   var body: some View {
     NavigationStack {
-      HomeView()
+      if wcManager.isDataAvailable {
+        HomeView()
+      } else {
+        SyncView()
+      }
     }
+    .environmentObject(movementFormState)
   }
-}
-
-#Preview {
-  ContentView()
 }

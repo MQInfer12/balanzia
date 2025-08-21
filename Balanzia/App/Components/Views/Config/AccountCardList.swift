@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct AccountCardList: View {
-  @Query private var accounts: [Account]
+  let accounts: [Account]
 
   var body: some View {
     Group {
@@ -28,9 +28,6 @@ struct AccountCardList: View {
           .padding(.bottom, 72)
         }
       }
-    }
-    .onAppear {
-      WCManager.shared.syncAccounts(accounts)
     }
   }
 }

@@ -18,22 +18,20 @@ struct ContentView: View {
   }
 
   var body: some View {
-    NavigationStack {
-      TabView {
-        MovementsView()
-          .tabItem {
-            Label("Movimientos", systemImage: "creditcard")
-          }
+    Group {
+      NavigationStack {
+        TabView {
+          MovementsView()
+            .tabItem {
+              Label("Movimientos", systemImage: "creditcard")
+            }
 
-        ConfigView()
-          .tabItem {
-            Label("Configuración", systemImage: "gearshape")
-          }
+          ConfigView()
+            .tabItem {
+              Label("Configuración", systemImage: "gearshape")
+            }
+        }
       }
     }
   }
-}
-
-#Preview {
-  ContentView()
 }

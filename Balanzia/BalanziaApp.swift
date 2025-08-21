@@ -12,10 +12,7 @@ import SwiftUI
 struct BalanziaApp: App {
   var body: some Scene {
     WindowGroup {
-      ContentView()
-        .onAppear {
-          _ = WCManager.shared
-        }
+      LoadWCView()
     }
     .modelContainer(for: [Account.self, Category.self, Movement.self])
   }

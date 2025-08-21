@@ -15,6 +15,7 @@ enum TabType {
 
 struct ConfigView: View {
   @Query private var accounts: [Account]
+  @Query private var categories: [Category]
 
   @State private var selectedTab: TabType = .cuentas
   @Namespace private var animation
@@ -93,7 +94,8 @@ struct ConfigView: View {
         ScrollView(.horizontal) {
           HStack {
             TabButton(
-              title: "Cuentas", isSelected: selectedTab == .cuentas,
+              title: "Cuentas",
+              isSelected: selectedTab == .cuentas,
               namespace: animation
             ) {
               withAnimation(.easeInOut) {
@@ -101,7 +103,8 @@ struct ConfigView: View {
               }
             }
             TabButton(
-              title: "Categorías", isSelected: selectedTab == .categorias,
+              title: "Categorías",
+              isSelected: selectedTab == .categorias,
               namespace: animation
             ) {
               withAnimation(.easeInOut) {
@@ -115,9 +118,9 @@ struct ConfigView: View {
         ZStack {
           Group {
             if selectedTab == .cuentas {
-              AccountCardList()
+              AccountCardList(accounts: accounts)
             } else {
-              CategoryCardList()
+              CategoryCardList(categories: categories)
             }
           }
           .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -158,6 +161,9 @@ struct ConfigView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.alto100.ignoresSafeArea())
+    .onAppear {
+      WCManager.shared.sync(accounts: accounts, categories: categories)
+    }
   }
 }
 
