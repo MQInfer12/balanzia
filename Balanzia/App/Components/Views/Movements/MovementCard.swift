@@ -42,7 +42,7 @@ public struct MovementCard: View {
                 Text(category.emoji)
                   .font(.system(size: 12))
 
-                Text(category.name.uppercased())
+                Text(category.type.uppercased())
                   .font(.caption)
                   .fontWeight(.bold)
                   .opacity(0.6)

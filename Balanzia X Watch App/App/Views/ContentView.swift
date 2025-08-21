@@ -12,7 +12,7 @@ struct ContentView: View {
   @StateObject private var movementFormState = MovementFormState()
 
   var body: some View {
-    NavigationStack {
+    Group {
       if wcManager.isDataAvailable {
         HomeView()
       } else {

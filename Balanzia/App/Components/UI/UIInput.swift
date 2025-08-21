@@ -18,6 +18,8 @@ struct UIInput: View {
   @Binding var value: String
   var type: InputType = .normal
 
+  @FocusState private var isFocused: Bool
+
   var body: some View {
     VStack {
       Text(title)
@@ -65,6 +67,10 @@ struct UIInput: View {
         }
         .padding()
         .background(Color.white)
+        .focused($isFocused)
+        .onTapGesture {
+          isFocused = true
+        }
         .overlay(
           RoundedRectangle(cornerRadius: 8)
             .stroke(Color.alto200, lineWidth: 1)
