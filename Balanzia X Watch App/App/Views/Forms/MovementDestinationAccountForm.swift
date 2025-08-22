@@ -29,9 +29,7 @@ struct MovementDestinationAccountForm: View {
     }
     .toolbar {
       ToolbarItem(placement: .confirmationAction) {
-        NavigationLink(destination: {
-          MovementCommentForm()
-        }) {
+        NavigationLink(value: "movement_comment_form") {
           Image(systemName: "checkmark")
             .font(.headline)
             .foregroundColor(Color.primary600)
@@ -65,10 +63,8 @@ struct MovementDestinationAccountFormList: View {
           UINavigationLink(
             iconName: account.icon,
             title: account.name,
-            active: account.id == form.destinationAccount?.id
+            value: "movement_comment_form"
           ) {
-            MovementCommentForm()
-          } action: {
             form.destinationAccount = account
           }
         }

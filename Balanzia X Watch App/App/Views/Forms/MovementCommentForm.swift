@@ -10,9 +10,9 @@ import SwiftUI
 struct MovementCommentForm: View {
   @EnvironmentObject var form: MovementFormState
   @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject var navState: NavigationState
 
   @State var isLoading = false
-  @State var navigateNext = false
 
   var body: some View {
     VStack {
@@ -43,8 +43,8 @@ struct MovementCommentForm: View {
           form.save { reply in
             DispatchQueue.main.async {
               form.completeStatus = reply
+              navState.path.append("movement_form_completion")
             }
-            navigateNext = true
           }
         } label: {
           Image(systemName: "checkmark")
@@ -59,9 +59,6 @@ struct MovementCommentForm: View {
       Text("Comentario")
         .foregroundColor(Color.primary600)
         .font(.caption2)
-    }
-    .navigationDestination(isPresented: $navigateNext) {
-      MovementFormCompletion()
     }
   }
 }

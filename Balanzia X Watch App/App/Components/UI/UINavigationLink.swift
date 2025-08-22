@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct UINavigationLink<Children: View>: View {
+struct UINavigationLink: View {
   let iconName: String?
   let emoji: String?
   let title: String
   let active: Bool?
-  let destination: () -> Children
+  let value: String
   let action: (() -> Void)?
 
   @State private var isActive = false
@@ -22,22 +22,19 @@ struct UINavigationLink<Children: View>: View {
     emoji: String? = nil,
     title: String,
     active: Bool? = nil,
-    @ViewBuilder destination: @escaping () -> Children,
+    value: String,
     action: (() -> Void)? = nil,
   ) {
     self.iconName = iconName
     self.emoji = emoji
     self.title = title
     self.active = active
-    self.destination = destination
+    self.value = value
     self.action = action
   }
 
   var body: some View {
-    Button {
-      action?()
-      isActive = true
-    } label: {
+    NavigationLink(value: value) {
       HStack {
         if let emoji = emoji {
           Text(emoji)
@@ -77,8 +74,10 @@ struct UINavigationLink<Children: View>: View {
       )
     }
     .buttonStyle(PlainButtonStyle())
-    .navigationDestination(isPresented: $isActive) {
-      destination()
-    }
+    .simultaneousGesture(
+      TapGesture().onEnded {
+        action?()
+      }
+    )
   }
 }

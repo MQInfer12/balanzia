@@ -29,13 +29,10 @@ struct MovementOriginAccountForm: View {
     }
     .toolbar {
       ToolbarItem(placement: .confirmationAction) {
-        NavigationLink(destination: {
-          if form.category?.type == .transfer {
-            MovementDestinationAccountForm()
-          } else {
-            MovementCommentForm()
-          }
-        }) {
+        NavigationLink(
+          value: form.category?.type == .transfer
+            ? "movement_destination_account_form" : "movement_comment_form"
+        ) {
           Image(systemName: "checkmark")
             .font(.headline)
             .foregroundColor(Color.primary600)
@@ -69,14 +66,9 @@ struct MovementOriginAccountFormList: View {
           UINavigationLink(
             iconName: account.icon,
             title: account.name,
-            active: account.id == form.originAccount?.id
+            value: form.category?.type == .transfer
+              ? "movement_destination_account_form" : "movement_comment_form"
           ) {
-            if form.category?.type == .transfer {
-              MovementDestinationAccountForm()
-            } else {
-              MovementCommentForm()
-            }
-          } action: {
             form.originAccount = account
           }
         }

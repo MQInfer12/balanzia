@@ -29,14 +29,12 @@ struct MovementCategoryForm: View {
     }
     .toolbar {
       ToolbarItem(placement: .confirmationAction) {
-        NavigationLink(destination: {
-          if form.category?.type == .expense || form.category?.type == .transfer
-          {
-            MovementOriginAccountForm()
-          } else if form.category?.type == .income {
-            MovementDestinationAccountForm()
-          }
-        }) {
+        NavigationLink(
+          value: (form.category?.type == .expense
+            || form.category?.type == .transfer)
+            ? "movement_origin_account_form"
+            : "movement_destination_account_form"
+        ) {
           Image(systemName: "checkmark")
             .font(.headline)
             .foregroundColor(Color.primary600)
@@ -72,14 +70,11 @@ struct MovementCategoryFormList: View {
           UINavigationLink(
             emoji: category.emoji,
             title: category.name,
-            active: active
+            value: (form.category?.type == .expense
+              || form.category?.type == .transfer)
+              ? "movement_origin_account_form"
+              : "movement_destination_account_form"
           ) {
-            if category.type == .expense || category.type == .transfer {
-              MovementOriginAccountForm()
-            } else if category.type == .income {
-              MovementDestinationAccountForm()
-            }
-          } action: {
             if category.type != .expense && category.type != .transfer {
               form.originAccount = nil
             }

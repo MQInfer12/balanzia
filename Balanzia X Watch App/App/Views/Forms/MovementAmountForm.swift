@@ -28,7 +28,7 @@ struct MovementAmountForm: View {
       }
 
       ToolbarItem(placement: .confirmationAction) {
-        NavigationLink(destination: MovementCategoryForm()) {
+        NavigationLink(value: "movement_category_form") {
           Image(systemName: "checkmark")
             .font(.headline)
             .foregroundColor(Color.primary600)

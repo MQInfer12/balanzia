@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MovementFormCompletion: View {
   @EnvironmentObject var form: MovementFormState
+  @EnvironmentObject var navState: NavigationState
 
   var body: some View {
     Group {
@@ -40,6 +41,8 @@ struct MovementFormCompletion: View {
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
+          navState.path.removeLast(navState.path.count)
+          form.reset()
         } label: {
           Image(systemName: "house")
             .font(.headline)
@@ -48,6 +51,9 @@ struct MovementFormCompletion: View {
 
       ToolbarItem(placement: .confirmationAction) {
         Button {
+          navState.path.removeLast(navState.path.count)
+          navState.path.append("movement_amount_form")
+          form.reset()
         } label: {
           Image(systemName: "goforward.plus")
             .font(.headline)
