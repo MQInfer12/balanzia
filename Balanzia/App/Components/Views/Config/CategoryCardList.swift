@@ -20,8 +20,20 @@ struct CategoryCardList: View {
       } else {
         ScrollView(.vertical) {
           VStack(spacing: 12) {
-            ForEach(categories) { category in
-              CategoryCard(category: category)
+            ForEach(CategoryType.allCases, id: \.self) { type in
+              let filteredCategories = categories.filter { $0.typeEnum == type }
+
+              if !filteredCategories.isEmpty {
+                Text(type.rawValue)
+                  .font(.caption)
+                  .fontWeight(.medium)
+                  .opacity(0.5)
+                  .frame(maxWidth: .infinity, alignment: .leading)
+
+                ForEach(filteredCategories) { category in
+                  CategoryCard(category: category)
+                }
+              }
             }
           }
           .padding()

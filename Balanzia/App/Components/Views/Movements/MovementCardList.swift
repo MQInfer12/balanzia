@@ -9,7 +9,12 @@ import SwiftData
 import SwiftUI
 
 struct MovementCardList: View {
-  @Query private var movements: [Movement]
+  @Query(
+    sort: [
+      SortDescriptor(\Movement.date, order: .reverse),
+      SortDescriptor(\Movement.createdAt, order: .reverse),
+    ]
+  ) private var movements: [Movement]
 
   var body: some View {
     if movements.isEmpty {

@@ -57,31 +57,38 @@ struct MovementCategoryFormList: View {
 
   var body: some View {
     if let categories = wcManager.categories {
-      VStack {
-        Text("Categoría")
-          .font(.caption2)
-          .fontWeight(.semibold)
-          .foregroundColor(.gray)
-          .frame(maxWidth: .infinity, alignment: .leading)
+      VStack(spacing: 8) {
+        ForEach(CategoryType.allCases, id: \.self) { type in
+          let filteredCategories = categories.filter { $0.type == type }
 
-        ForEach(categories) { category in
-          let active = category.id == form.category?.id
+          if !filteredCategories.isEmpty {
+            VStack {
+              Text(type.rawValue)
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundColor(.gray)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-          UINavigationLink(
-            emoji: category.emoji,
-            title: category.name,
-            value: (form.category?.type == .expense
-              || form.category?.type == .transfer)
-              ? "movement_origin_account_form"
-              : "movement_destination_account_form"
-          ) {
-            if category.type != .expense && category.type != .transfer {
-              form.originAccount = nil
+              ForEach(filteredCategories) { category in
+                let active = category.id == form.category?.id
+
+                UINavigationLink(
+                  emoji: category.emoji,
+                  title: category.name,
+                  active: active,
+                  value: (category.type == .expense
+                    || category.type == .transfer)
+                    ? "movement_origin_account_form"
+                    : "movement_destination_account_form"
+                ) {
+                  if category.type != form.category?.type {
+                    form.originAccount = nil
+                    form.destinationAccount = nil
+                  }
+                  form.category = category
+                }
+              }
             }
-            if category.type != .income && category.type != .transfer {
-              form.destinationAccount = nil
-            }
-            form.category = category
           }
         }
       }

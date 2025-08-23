@@ -41,15 +41,34 @@ struct MovementsView: View {
     NavigationView {
       VStack {
         HStack {
-          Text("Movimientos")
-            .font(.title2)
-            .foregroundStyle(.white)
-            .fontWeight(.bold)
+          ZStack(alignment: .topLeading) {
+            HStack(alignment: .center, spacing: 8) {
+              Image("AppIcon")
+                .resizable()
+                .frame(width: 24, height: 24)
+                .cornerRadius(4)
+              Text("Balanzia")
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+            }
+            .padding(.top, 8)
+            .padding(.leading, 16)
+
+            Text("Movimientos")
+              .font(.title2)
+              .fontWeight(.bold)
+              .foregroundStyle(.white)
+              .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: .center
+              )
+          }
         }
-        .ignoresSafeArea(.all, edges: .top)
         .frame(height: 144)
         .frame(maxWidth: .infinity)
-        .background(Color.primary600.gradient)
+        .background(Color.primary500.gradient)
 
         ZStack {
           HStack {

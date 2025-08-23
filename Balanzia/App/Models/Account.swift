@@ -24,8 +24,15 @@ class Account: Codable {
 
   var balance: Double {
     var calc = amount
-    calc -= originMovements.reduce(0) { $0 + $1.amount }
-    calc += destinationMovements.reduce(0) { $0 + $1.amount }
+    
+    if typeEnum == .payable {
+      calc += originMovements.reduce(0) { $0 + $1.amount }
+      calc -= destinationMovements.reduce(0) { $0 + $1.amount }
+    } else {
+      calc -= originMovements.reduce(0) { $0 + $1.amount }
+      calc += destinationMovements.reduce(0) { $0 + $1.amount }
+    }
+    
     return calc
   }
 

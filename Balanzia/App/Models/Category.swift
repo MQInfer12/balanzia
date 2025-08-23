@@ -74,7 +74,7 @@ extension Category {
 }
 
 public enum CategoryType: String, CaseIterable, Codable {
-  case income = "Ingreso"
   case expense = "Gasto"
+  case income = "Ingreso"
   case transfer = "Transferencia"
 }

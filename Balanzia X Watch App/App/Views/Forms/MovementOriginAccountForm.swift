@@ -31,7 +31,8 @@ struct MovementOriginAccountForm: View {
       ToolbarItem(placement: .confirmationAction) {
         NavigationLink(
           value: form.category?.type == .transfer
-            ? "movement_destination_account_form" : "movement_comment_form"
+            ? "movement_destination_account_form"
+            : "movement_comment_form"
         ) {
           Image(systemName: "checkmark")
             .font(.headline)
@@ -63,11 +64,15 @@ struct MovementOriginAccountFormList: View {
 
       VStack {
         ForEach(accounts) { account in
+          let active = account.id == form.originAccount?.id
+
           UINavigationLink(
             iconName: account.icon,
             title: account.name,
+            active: active,
             value: form.category?.type == .transfer
-              ? "movement_destination_account_form" : "movement_comment_form"
+              ? "movement_destination_account_form"
+              : "movement_comment_form"
           ) {
             form.originAccount = account
           }

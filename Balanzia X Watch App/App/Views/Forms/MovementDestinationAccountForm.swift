@@ -60,9 +60,12 @@ struct MovementDestinationAccountFormList: View {
 
       VStack {
         ForEach(accounts) { account in
+          let active = account.id == form.destinationAccount?.id
+
           UINavigationLink(
             iconName: account.icon,
             title: account.name,
+            active: active,
             value: "movement_comment_form"
           ) {
             form.destinationAccount = account
